@@ -10,11 +10,26 @@ const knex = require('knex')({
 })
 const bookshelf = require('bookshelf')(knex)
 
-/* knex.schema.createTable('applicants', function(table) {
+knex.schema.createTableIfNotExists('applicants', function(table) {
     table.increments()
     table.string('firstName')
     table.string('lastName')
+    table.string('email')
+    table.string('position')
+    table.boolean('deleted')
     table.timestamps()
-}) */
+}).then(res=> {
+    console.log('Applicants table created')
+})
+
+knex.schema.createTableIfNotExists('managers', function(table) {
+    table.increments()
+    table.string('username')
+    table.string('password')
+    table.string('token')
+    table.timestamps()
+}).then(res=> {
+    console.log('Managers table created')
+})
 
 module.exports = bookshelf

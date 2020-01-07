@@ -1,5 +1,26 @@
-<div class="example-container">
-    <mat-form-field>
-        <input matInput placeholder="Input">
-    </mat-form-field>
-</div>
+<mat-card-header>
+    <h2>Looking for a job? Look no further!</h2>
+</mat-card-header>
+<mat-card-content>
+    <form (submit)=submit()>
+        <div class="flex-container">
+            <mat-form-field>
+                <input matInput name="firstName" placeholder="First Name" type="text" required [(ngModel)]=firstName>
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput name="lastName" placeholder="Last Name" type="text" required [(ngModel)]=lastName>
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput name="email" placeholder="Email" type="email" required [(ngModel)]=email>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Position</mat-label>
+                <select matNativeControl name="position" required [(ngModel)]=position>
+                    <option *ngFor="let position of availablePositions" value="{{position}}">{{position}}</option>
+                </select>
+            </mat-form-field>
+        </div>
+        <button mat-button *ngIf="submitting" type="button"><mat-spinner diameter=36></mat-spinner> </button>
+        <button mat-button *ngIf="!submitting" type="submit">Submit</button>
+    </form>
+</mat-card-content>

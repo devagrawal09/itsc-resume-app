@@ -5,16 +5,14 @@ const router = Router()
 
 // api routes
 
-router.route('/applicant').post(async (req, res)=> {
-    const data = req.body.applicant
-    try {
-        const applicant = await controllers.newApplicant(data)
-        console.log(`New applicant created: ${applicant.get('firstName')} ${applicant.get('lastName')}`)
-        res.status(200).send()
-    } catch(err) {
-        console.error(`Error creating new applicant: ${err}`)
-        res.status(500).send()
-    }
-})
+router.route('/applicant').post(controllers.newApplicant)
+
+router.route('/login').post(controllers.loginManager)
+
+router.route('/logout').post(controllers.logoutManager)
+
+router.route('/applicant').get(controllers.fetchApplicants)
+
+router.route('/applicant').delete(controllers.deleteApplicant)
 
 module.exports = router

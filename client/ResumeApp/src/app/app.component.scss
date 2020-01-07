@@ -1,0 +1,14 @@
+.top-nav {
+    display: flex;
+    justify-content: flex-start;
+    span {
+        flex-grow: 1;
+    }
+    a {
+        margin-left: 10px;
+    }
+}
+
+.container {
+    padding: 15px;
+}

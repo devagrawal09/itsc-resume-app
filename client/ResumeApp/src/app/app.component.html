@@ -1,1 +1,11 @@
-<router-outlet></router-outlet>
+<mat-toolbar color="primary" class="top-nav">
+    <span>{{welcomeText()}}</span>
+    <a mat-button *ngIf="!isLoggedIn()" routerLink='/apply'>Apply</a>
+    <a mat-button *ngIf="!isLoggedIn()" routerLink='/login'>Login</a>
+    <a mat-button *ngIf="isLoggedIn()" (click)=logout()>Logout</a>
+</mat-toolbar>
+<div class="container">
+    <mat-card>
+        <router-outlet></router-outlet>
+    </mat-card>
+</div>
