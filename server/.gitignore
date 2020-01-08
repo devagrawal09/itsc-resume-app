@@ -1,2 +1,4 @@
 node_modules
 resume-uploads/*
+client/*
+.env
