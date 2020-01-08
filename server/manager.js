@@ -17,8 +17,8 @@ const createSampleManager = async ()=> {
   const count = await Manager.count()
   console.log(`Manager count: ${count}`)
   if( count == 0 ) {
-    const username = 'devagrawal09'
-    const password = await bcrypt.hash('hailsatan', 10)
+    const username = process.env.MANAGER_USERNAME
+    const password = await bcrypt.hash(process.env.MANAGER_PASSWORD, 10)
     const token = ''
     const manager = new Manager({ username, password, token })
     const doc = await manager.save()
