@@ -18,13 +18,19 @@ export class ApplicantService {
 
   fetchApplicants(): Observable<ApplicantsResponse> {
     const endpoint = `${environment.apiUrl}/applicant`
-    return this.http.get<ApplicantsResponse>(endpoint)
+    return this.http.get<ApplicantsResponse>(endpoint).pipe(map(res=> {
+      res.applicants.map(applicant=> {
+        applicant.resume = `${environment.staticUrl}/${applicant.id}.pdf`
+        return applicant
+      })
+      return res
+    }))
   }
 
-  deleteApplicant(selectedIds: Array<number>): Observable<null> {
+  deleteApplicant(selectedIds: Array<number>): Observable<number> {
     const endpoint = `${environment.apiUrl}/applicant`
-    return this.http.request<null>('DELETE', endpoint, {
+    return this.http.request<string>('DELETE', endpoint, {
       body: { selectedIds }
-    })
+    }).pipe(map(res=> parseInt(res)))
   }
 }

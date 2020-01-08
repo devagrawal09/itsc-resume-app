@@ -10,10 +10,14 @@ const generateRandomString = async (len)=> {
 }
 
 exports.newApplicant = async (req, res)=> {
-    const data = req.body.applicant
+    const data = req.body
     try {
         const applicant = await new Applicant(data).save()
         console.log(`New applicant created: ${applicant.get('firstName')} ${applicant.get('lastName')}`)
+
+        const resume = req.files.resume
+        await util.promisify(resume.mv)(`resume-uploads/${applicant.get('id')}.pdf`)
+
         res.status(200).send()
     } catch(err) {
         console.error(`Error creating new applicant: ${err}`)
@@ -26,7 +30,6 @@ exports.loginManager = async (req, res)=> {
     try {
         const manager = await Manager.login(credentials)
         const token = await generateRandomString(48)
-        console.log({ token })
         await manager.set({ token }).save()
         res.json({ token })
     } catch(err) {
@@ -37,7 +40,6 @@ exports.loginManager = async (req, res)=> {
 
 exports.logoutManager = async (req, res)=> {
     const credentials = req.body.credentials
-    console.log({ credentials })
     try {
         const manager = await new Manager(credentials).fetch()
         const token = manager.get('token')
@@ -72,7 +74,7 @@ exports.deleteApplicant = async (req, res)=> {
         const promises = selectedApplicants.map(applicant=> applicant.set({ deleted: true }).save())
         const deleted = await Promise.all(promises)
         console.log(`${deleted.length} applicants deleted`)
-        res.status(200).send()
+        res.status(200).send(`${deleted.length}`)
     } catch(err) {
         console.error(err)
         res.status(500).send()

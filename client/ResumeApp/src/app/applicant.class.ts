@@ -4,4 +4,5 @@ export class Applicant {
     lastName: string
     email: string
     position: string
+    resume: File | string | undefined
 }

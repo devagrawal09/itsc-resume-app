@@ -6,6 +6,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { ManagerGuard } from './manager.guard';
 
 const routes: Routes = [
+  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   { path: 'apply', component: ApplicantFormComponent },
   { path: 'login', component: LoginFormComponent },
   { path: 'dashboard', component: DashboardComponent, canActivate: [ManagerGuard] }

@@ -11,8 +11,11 @@ export class ApplicationService {
 
   constructor(private http: HttpClient) { }
 
-  submitApplication(applicant: Applicant): Observable<any> {
+  submitApplication(applicant: FormData): Observable<any> {
     const endpoint = `${environment.apiUrl}/applicant`
-    return this.http.post(endpoint, { applicant })
+    return this.http.post(endpoint, applicant, {
+      reportProgress: true,
+      observe: 'events'
+    })
   }
 }
