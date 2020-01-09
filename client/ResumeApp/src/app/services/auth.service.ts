@@ -27,15 +27,12 @@ export class AuthService {
     ))
   }
 
-  logout(): Observable<null> {
-    const token = localStorage.getItem(this.storageKey)
-    const credentials = { token }
-    const endpoint = `${environment.apiUrl}/logout`
-    return this.http.post<null>(endpoint, { credentials }).pipe(tap(
-      ()=> {
-        localStorage.removeItem(this.storageKey)
-      }
-    ))
+  logout(): void {
+    localStorage.removeItem(this.storageKey)
+  }
+
+  getToken(): string {
+    return localStorage.getItem(this.storageKey)
   }
 
   isLoggedIn(): boolean {

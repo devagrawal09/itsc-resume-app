@@ -17,12 +17,11 @@ export class AppComponent {
   }
 
   logout(): void {
-    this.auth.logout().subscribe(res=> {
-      this.snackBar.open('Logged out!', 'Dismiss', {
-        duration: 2000
-      })
-      this.router.navigate(['login'])
+    this.auth.logout()
+    this.snackBar.open('Logged out!', 'Dismiss', {
+      duration: 2000
     })
+    this.router.navigate(['login'])
   }
 
   welcomeText() {

@@ -1,9 +1,10 @@
 import { Injectable, OnInit } from '@angular/core'
 import { Applicant } from '../applicant.class'
 import { Observable } from 'rxjs'
-import { HttpClient } from '@angular/common/http'
+import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { environment } from 'src/environments/environment'
 import { map } from 'rxjs/operators'
+import { AuthService } from './auth.service'
 
 class ApplicantsResponse {
     applicants: Array<Applicant>
@@ -14,11 +15,21 @@ class ApplicantsResponse {
 })
 export class ApplicantService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private auth: AuthService) { }
+
+  sendSecureRequest<R>(method: string, endpoint: string, body: any): Observable<R> {
+    const token = this.auth.getToken()
+    return this.http.request<R>(method, endpoint, {
+      headers: new HttpHeaders({
+        Authorization: `Bearer ${token}`
+      }),
+      body
+    })
+  }
 
   fetchApplicants(): Observable<ApplicantsResponse> {
     const endpoint = `${environment.apiUrl}/applicant`
-    return this.http.get<ApplicantsResponse>(endpoint).pipe(map(res=> {
+    return this.sendSecureRequest<ApplicantsResponse>('GET', endpoint, {}).pipe(map(res=> {
       res.applicants.map(applicant=> {
         applicant.resume = `${environment.staticUrl}/${applicant.id}.pdf`
         return applicant
@@ -29,8 +40,6 @@ export class ApplicantService {
 
   deleteApplicant(selectedIds: Array<number>): Observable<number> {
     const endpoint = `${environment.apiUrl}/applicant`
-    return this.http.request<string>('DELETE', endpoint, {
-      body: { selectedIds }
-    }).pipe(map(res=> parseInt(res)))
+    return this.sendSecureRequest<string>('DELETE', endpoint, { selectedIds }).pipe(map(res=> parseInt(res)))
   }
 }
